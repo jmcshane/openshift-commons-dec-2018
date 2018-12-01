@@ -3,12 +3,9 @@ layout: default
 title: Continuous Delivery on OpenShift
 ---
 
+name: inverse
 layout: true
-name: top-bar
-.left[![HealthPartners](/rhug-sept-2018/images/hplogo.gif)]
-.twitter-handle[
-  `@jmcshane`
-]
+class: center, middle, inverse
 ---
 
 class: center
@@ -20,61 +17,63 @@ class: center
 ## Building a functional build/deploy system at HealthPartners
 
 ---
+layout: true
+name: top-bar
+.left[![HealthPartners](/openshift-commons-dec-2018/images/hplogo.gif)]
+.twitter-handle[
+  `@jmcshane`
+]
+---
 
 # Philosophies
 
-1. High availability
-2. Secure credentials
-3. Good default behavior
-4. CI/CD Principles
-5. Source control
-6. Ephemeral build systems
+* Optimize for speed of delivery on the platform
+* Secure credentials
+* Good default behavior
+* Ephemeral build systems
+* Source control practice - single mainline
 
 ---
 
-# Definitions
-
-* Continuous integration (CI) is the practice of merging all developer working copies to a shared mainline several times a day.
-  * A breaking build should spring teams to action
-* Continuous delivery (CD) is a software engineering approach in which teams produce software in short cycles, ensuring that the software can be reliably released at any time.
-  * The application "can" be deployed on demand, when application teams approve
----
-
-# Cluster Design
-
-* Build tools run on bld1 cluster
-* Applications have three environments (dev, uat, prod)
-.center[![Clusters](/rhug-sept-2018/images/cluster-design.png)]
-
----
-
-# Tools
+# ToolChain
 
 * Jenkins
 * Bitbucket and Gitlab (long story)
-* Nexus and Artifactory (long story)
-* Jira & HipChat
+* Artifactory (long story)
+* Jira
+* HipChat
 * Hashicorp Vault
 * Fortify
 * Sonarqube
 * ServiceNow
 
+???
+
+Every company has its own toolchain. For companies today,
+it doesn't matter what the tools are, as long as they
+are operated in a self-service manner and provide
+consistent functionality to the teams using them.
+
+Capabilities:
+- Build automation
+- Source control
+- Artifact Management
+- Work Tracking
+- Chat
+- Secret Management
+- Code scanning
+- Change control
+
 ---
 
-# OpenShift Concepts
+# Historical Perspective
 
-* `BuildConfig` object integrates with Jenkins using `openshift-sync` plugin
-* Jenkins pod running in each OpenShift namespace
-* Each team owns one or more namespaces
 
 ---
 
 # Jenkins Concepts
 
 * Shared libraries create functions that can be called from Jenkinsfile
-* Groovy scripts stored in `vars/` directory
-* Groovy classes stored in `src/` directory
-* Resources stored in `resources/` directory
 * More info at https://jenkins.io/doc/book/pipeline/shared-libraries/
 
 ---
@@ -82,21 +81,14 @@ class: center
 # Developer Viewpoint
 
 * Single entrypoint to administrative actions
-* Building more capable administration:
-  * New namespaces
-  * Jenkins machine management
-  * Pod diagnostic actions
-  * Creating new credentials
-  * Cleanup jobs
-  * Temporary access
+* Give control of the tools to the developers in self-service workflows
+* Make it easy to take a 1 line code change to production
 
----
+???
 
-# Developer Viewpoint
-
-.left-column[![NamespaceManagement](/rhug-sept-2018/images/namespaceManagement.png)]
-.right-column[![ToolManagement](/rhug-sept-2018/images/toolManagement.png)]
-
+Created a single entrypoint configured by a Jenkinsfile.
+Developers don't need to learn Groovy, just how to write
+a basic map in Groovy
 
 ---
 
@@ -107,12 +99,12 @@ class: center
 * `oc create -f pipeline.yaml`
 * Jenkins pod in the namespace runs the build
 
-.center[![BlueOcean](/rhug-sept-2018/images/jenkinsBO.png)]
+.center[![BlueOcean](/openshift-commons-dec-2018/images/jenkinsBO.png)]
 
 
 ---
 
-.center[![ApplicationView](/rhug-sept-2018/images/deploymentExample.png)]
+.center[![ApplicationView](/openshift-commons-dec-2018/images/deploymentExample.png)]
 
 ---
 
@@ -533,7 +525,7 @@ if (project.buildType == 'maven') {
 
 # Visualizing the Data
 
-.center[![Deployments](/rhug-sept-2018/images/deploymentLog.png)]
+.center[![Deployments](/openshift-commons-dec-2018/images/deploymentLog.png)]
 
 ---
 
@@ -709,4 +701,4 @@ mavenNode([appName:'sb-app-integrationtest']) {
 2. https://github.com/HealthPartners/jenkins-shared-library-test-helper
 3. https://github.com/HealthPartners/snogo
 4. https://jenkins.io/doc/book/pipeline/shared-libraries/
-5. https://github.com/HealthPartners/rhug-sept-2018
+5. https://github.com/HealthPartners/openshift-commons-dec-2018
