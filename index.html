@@ -29,12 +29,7 @@ name: top-bar
 
 _Our mission is to improve health and well-being in partnership with our members, patients and community_
 
-* Regional health insurance and health care company based in Bloomington, MN
-* Founded in 1957 as Group Health Inc.
-* 8 hospitals
-* 80+ clinics
-* 1.2 million patients
-* 1.8 million insured
+.center[![Info](/openshift-commons-dec-2018/images/healthpartnersinfo.png)]
 
 ---
 
@@ -82,6 +77,12 @@ of the new ways of operating that we have developed.
 * Good default behavior
 * Ephemeral build systems
 * Source control practices - single mainline
+
+???
+
+These five philosophies outline how we have made our decisions
+going forward to build and design the pipeline. Each of these
+decisions has made an impact on things you will see later in this talk.
 
 ---
 
@@ -135,14 +136,14 @@ a basic map in Groovy
 * Create your git repository with Jenkinsfile and pipeline.yaml at the root
 * `oc login https://openshift-bld1.hp.com && oc project MYPROJECT`
 * `oc create -f pipeline.yaml`
-* Jenkins pod in the namespace runs the build
+* Each team owns their own Jenkins machine that runs as a pod in their namespace
 
-.center[![BlueOcean](/openshift-commons-dec-2018/images/jenkinsBO.png)]
+???
 
-
----
-
-.center[![ApplicationView](/openshift-commons-dec-2018/images/deploymentExample.png)]
+Created templates to generate these Jenkinsfile and pipeline.yaml files.
+Mostly boilerplate code that we have reduced as much as possible.
+Working to create automated processes that will validate these files
+as well as provide suggestions and capabilities that can migrate these files to new versions.
 
 ---
 
@@ -157,11 +158,23 @@ library identifier: 'hp-pipeline-library@master', retriever: modernSCM(
 
 hpPipeline([
   appName: "my-service",
-  deployPom: "my-service/pom.xml",
   team: "Cloud"
 ])
 ```
 
+???
+
+The goal here is to make it easy to do the right thing. An application
+with these settings can be safely validated and deployed to production as simple
+as this looks.
+
+---
+
+.center[![ApplicationView](/openshift-commons-dec-2018/images/deploymentExample.png)]
+
+???
+
+This is the view that application developers see when they are executing their pipeline.
 ---
 
 # The Pipeline
@@ -174,6 +187,12 @@ hpPipeline([
 6. Verify
 7. Repeat 4-6
 
+???
+
+Our pipeline attempts to abstract each of these six steps to allow
+teams to fill in these components as they need. Within a large
+organization, it is critical to allow development teams to innovate within
+the platform.
 
 ---
 
@@ -186,6 +205,14 @@ hpPipeline([
   * Run s2i build from base image
   * Publish image to external registry
 
+???
+
+One of the keys of our pipeline here is to provide flexibility in the build
+stage. This means we can start with lots of different s2i
+base images, provide many different types of base artifacts, and combine
+them to make standard sorts of docker images, which need little validation
+because most of their layers come from our pre-validated s2i image.
+
 ---
 
 # Testing
@@ -194,14 +221,30 @@ hpPipeline([
 * Generally JUnit tests, building `@SpringBootTest` component tests to load parts of the application
 * H2 Database testing
 
+???
+
+Our team goal is to provide lots of capabilities for building a solid
+testing pyramid, lots of validation early in the build process, and
+good, but small end to end tests and smoke testing of applications
+as they are deployed.
+
 ---
 
 # Pre-Deployment
 
 * Environment approval
 * Check that the target cluster is available
-* Change management
+* Other validations as necessary
+  * Static code scan approvals
+  * Gather Jira information
+  * Change management
 
+???
+
+These steps vary by where the artifact is being deployed.
+The bar is set low to deploy to the dev environments, but as
+your code is promoted up the stack, there are more requirements to
+pass in both pre-deployment and post deployment verification
 ---
 
 # Deployment
