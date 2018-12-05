@@ -14,7 +14,9 @@ class: center
 
 <hr />
 
-## Building a functional build/deploy system at HealthPartners
+## James McShane, Healthpartners
+
+## Building a functional build/deploy system
 
 ---
 layout: true
@@ -31,17 +33,23 @@ _Our mission is to improve health and well-being in partnership with our members
 
 .center[![Info](/openshift-commons-dec-2018/images/healthpartnersinfo.png)]
 
+???
+
+A little data sheet from the internet.
+
+Non-profit, regional health insurance health care provider in Minnesota
 ---
 
 # Who am I?
 
 * James McShane
 * Joined HealthPartners in 2016
-* Began our OpenShift journey in November 2016
 * Platform and Architecture group
 * Our platform runs HealthPartners.com and our health plan administration
 
 ???
+
+* Began our OpenShift journey in November 2016
 
 Platform and Architecture group formed out of a team that operated
 specifically in the HP.com space, but then became a group meant to
@@ -62,11 +70,11 @@ of the new ways of operating that we have developed.
 # Our J2EE World
 
 * Long lead time to production
-* Deploys generally at night, teams deployed bi-weekly to monthly
-* Shared environments mean you run into one another
+* Deploys generally at night
+* Shared environments
 * Difficult to validate large changes
   * 10 months for a version upgrade
-* Challenges in this world lead us naturally to container orchestration
+* Naturally leads us to container orchestration
 
 ---
 
@@ -88,6 +96,19 @@ decisions has made an impact on things you will see later in this talk.
 
 # ToolChain
 
+![JenkinsLogo](/openshift-commons-dec-2018/images/jenkinslogo.png)
+![VaultLogo](/openshift-commons-dec-2018/images/vaultlogo.png)
+![BitbucketLogo](/openshift-commons-dec-2018/images/bitbucket.png)
+![ArtifactoryLogo](/openshift-commons-dec-2018/images/artifactorylogo.png)
+![ServiceNowLogo](/openshift-commons-dec-2018/images/service-now-logo.png)
+![FortifyLogo](/openshift-commons-dec-2018/images/fortifylogo.png)
+![SonarQubeLogo](/openshift-commons-dec-2018/images/sonarqubelogo.png)
+![GitlabLogo](/openshift-commons-dec-2018/images/gitlab-logo.png)
+![JiraLogo](/openshift-commons-dec-2018/images/jiralogo.png)
+
+
+???
+
 * Jenkins
 * Bitbucket and Gitlab (long story)
 * Artifactory
@@ -97,8 +118,6 @@ decisions has made an impact on things you will see later in this talk.
 * Fortify
 * Sonarqube
 * ServiceNow
-
-???
 
 Every company has its own toolchain. For companies today,
 it doesn't matter what the tools are, as long as they
@@ -395,4 +414,5 @@ pass in both pre-deployment and post deployment verification
 2. https://github.com/HealthPartners/jenkins-shared-library-test-helper
 3. https://github.com/HealthPartners/snogo
 4. https://jenkins.io/doc/book/pipeline/shared-libraries/
-5. https://github.com/HealthPartners/openshift-commons-dec-2018
+5. https://github.com/jmcshane/openshift-commons-dec-2018
+6. https://github.com/HealthPartners/rhug-sept-2018
