@@ -115,15 +115,9 @@ decisions has made an impact on things you will see later in this talk.
 
 ???
 
-* Jenkins
-* Bitbucket and Gitlab (long story)
-* Artifactory
-* Jira
-* HipChat
-* Hashicorp Vault
-* Fortify
-* Sonarqube
-* ServiceNow
+* Jenkins,  Bitbucket and Gitlab (long story), Artifactory
+* Jira, HipChat, Hashicorp Vault
+* Fortify, Sonarqube, ServiceNow
 
 Every company has its own toolchain. For companies today,
 it doesn't matter what the tools are, as long as they
@@ -156,25 +150,15 @@ Developers don't need to learn Groovy, just how to write
 a basic map in Groovy
 
 ---
+class: namedcode
 
 # Developer Viewpoint
 
 * Create your git repository with Jenkinsfile and pipeline.yaml at the root
 * `oc login https://openshift-bld1.hp.com && oc project MYPROJECT`
 * `oc create -f pipeline.yaml`
-* Each team owns their own Jenkins machine that runs as a pod in their namespace
 
-???
-
-Created templates to generate these Jenkinsfile and pipeline.yaml files.
-Mostly boilerplate code that we have reduced as much as possible.
-Working to create automated processes that will validate these files
-as well as provide suggestions and capabilities that can migrate these files to new versions.
-
----
-
-# Developer Viewpoint
-
+##### Jenkinsfile
 ```groovy
 hpPipeline([
   appName: "my-service",
@@ -183,6 +167,11 @@ hpPipeline([
 ```
 
 ???
+
+Created templates to generate these Jenkinsfile and pipeline.yaml files.
+Mostly boilerplate code that we have reduced as much as possible.
+Working to create automated processes that will validate these files
+as well as provide suggestions and capabilities that can migrate these files to new versions.
 
 The goal here is to make it easy to do the right thing. An application
 with these settings can be safely validated and deployed to production as simple
