@@ -4,13 +4,14 @@
     <meta charset="utf-8">
     <title>{{ page.title | strip_html }}</title>
     <style>
-      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(/openshift-commons-dec-2018/fonts/lato-bold-woff.woff);
+      @import url(/openshift-commons-dec-2018/fonts/lato-regular-woff.woff);
+      @import url(/openshift-commons-dec-2018/fonts/sanchez-semibold-woff.woff);
       @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
 
-      body { font-family: 'Droid Serif'; }
-      h1, h2, h3 {
-        font-family: 'Yanone Kaffeesatz';
+      body { font-family: 'lato-regular'; }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'sanchez-semibold';
         font-weight: normal;
         margin-bottom: 15px;
       }
@@ -18,10 +19,10 @@
         margin-top: 7px;
       }
       h1 {
-        margin-top: -20px;
+        margin-top: 25px;
       }
       .remark-slide-content {
-        font-size: 24px;
+        font-size: 28px;
         padding: 0em 2em 0em 2em;
       }
       .inverse {
@@ -40,7 +41,8 @@
       }
 
       .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
-      img[alt=HealthPartners] { width: 100px; height: 100px }
+      img[alt=HealthPartners] { width: 100px; height: 75px }
+      img[alt=HealthPartnersBig] { width: 200px; height: 150px }
       img[alt=Clusters] { width: 500px; height: 150px; margin-top: 50px}
       img[alt=BlueOcean] { width: 500px; height: 150px; margin-top: 20px}
       img[alt=OurTimeline] { width: 800px; height: 400px; margin-top: -30px}
@@ -50,15 +52,17 @@
       img[alt=NamespaceManagement] { width: 300px; height: 300px; margin-top: 30px}
       img[alt=ToolManagement] { width: 250px; height: 300px}
       img[alt=ApplicationView] { width: 800px; height: 500px}
-      img[alt=JenkinsLogo] { width: 200px; height: 100px; margin-bottom: 10px; margin-top: -40px}
-      img[alt=VaultLogo] { width: 200px; height: 200px; margin-left: 40px; margin-top: -40px}
-      img[alt=BitbucketLogo] { width: 200px; height: 150px; margin-left: 40px; margin-top: -40px}
+      img[alt=JenkinsLogo] { width: 200px; height: 100px; margin-bottom: 10px; margin-top: -40px; margin-left: 30px}
+      img[alt=VaultLogo] { width: 150px; height: 150px; margin-left: 40px; margin-top: -40px}
+      img[alt=BitbucketLogo] { width: 175px; height: 120px; margin-left: 40px; margin-top: -40px}
       img[alt=ArtifactoryLogo] { width: 250px; height: 100px; margin-left: 40px; margin-top: -60px}
       img[alt=ServiceNowLogo] { width: 200px; height: 100px}
-      img[alt=FortifyLogo] { width: 150px; height: 150px; margin-left: 40px;}
+      img[alt=FortifyLogo] { width: 100px; height: 100px; margin-left: 40px;}
       img[alt=SonarQubeLogo] { width: 200px; height: 100px; margin-left: 75px}
       img[alt=GitlabLogo] { width: 150px; height: 100px; margin-left: 30px}
       img[alt=JiraLogo] { width: 250px; height: 75px; margin-left: 30px}
+      img[alt=HipChatLogo] {width: 200px; height: 75px; margin-left: 150px}
+      img[alt=SpringBootLogo] {width: 200px; height: 100px; margin-left: 50px}
       .left-column {
         width: 50%;
         height: 92%;
@@ -74,6 +78,24 @@
         position: absolute;
         left: 20px;
       }
+      .brand-image {
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        bottom: 5px;
+        left: 0;
+        right: 0;
+      }
+
+      .brand-image-top {
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        right: 0;
+      }
+
 
       #continuous-delivery-on-openshift {
         padding-top: 1em;

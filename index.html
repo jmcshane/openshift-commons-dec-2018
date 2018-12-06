@@ -5,10 +5,12 @@ title: Continuous Delivery on OpenShift
 
 name: inverse
 layout: true
-class: center, middle, inverse
+class: center, middle
 ---
 
 class: center
+
+.brand-image-top[![HealthPartnersBig](/openshift-commons-dec-2018/images/hp-1v-4c.png)]
 
 # Continuous Delivery on OpenShift
 
@@ -19,7 +21,7 @@ class: center
 ---
 layout: true
 name: top-bar
-.left[![HealthPartners](/openshift-commons-dec-2018/images/hplogo.gif)]
+.brand-image[![HealthPartners](/openshift-commons-dec-2018/images/hp-1v-4c.png)]
 .twitter-handle[
   `@jmcshane`
 ]
@@ -36,6 +38,11 @@ _Our mission is to improve health and well-being in partnership with our members
 A little data sheet from the internet.
 
 Non-profit, regional health insurance health care provider in Minnesota
+
+Large enterprise - 26k employees!
+
+Started in 1957
+
 ---
 
 # Who am I?
@@ -103,7 +110,8 @@ decisions has made an impact on things you will see later in this talk.
 ![SonarQubeLogo](/openshift-commons-dec-2018/images/sonarqubelogo.png)
 ![GitlabLogo](/openshift-commons-dec-2018/images/gitlab-logo.png)
 ![JiraLogo](/openshift-commons-dec-2018/images/jiralogo.png)
-
+![HipChatLogo](/openshift-commons-dec-2018/images/hipchatlogo.png)
+![SpringBootLogo](/openshift-commons-dec-2018/images/springbootlogo.png)
 
 ???
 
@@ -136,9 +144,10 @@ Capabilities:
 
 # Developer Viewpoint
 
-* Single entrypoint to administrative actions
 * Give control of the tools to the developers in self-service workflows
-* Make it easy to take a 1 line code change to production
+* Single entrypoint to administrative actions
+* No longer need to manage hundreds of jobs on a single Jenkins server
+  * Jenkins job configuration now comes from source control!
 
 ???
 
@@ -167,12 +176,6 @@ as well as provide suggestions and capabilities that can migrate these files to 
 # Developer Viewpoint
 
 ```groovy
-library identifier: 'hp-pipeline-library@master', retriever: modernSCM(
-    [$class: 'GitSCMSource',
-    remote: 'ssh://git@git.healthpartners.com/paas/hp-pipeline-library.git',
-    credentialsId: "${env.NAMESPACE}-secret"]
-)
-
 hpPipeline([
   appName: "my-service",
   team: "Cloud"
@@ -304,7 +307,7 @@ pass in both pre-deployment and post deployment verification
   * Scan results
   * Deployment time
   * Deployment results
-
+  * Approvers
 
 ---
 
@@ -314,7 +317,7 @@ pass in both pre-deployment and post deployment verification
   * Much of the actions in the ServiceNow UI are available via API
 * Standard change request process
   * Change request templates that can be instantiated to changes
-  * Simplifies approval process for low priority changes
+  * Our pipeline enforces a standard process = Happy Auditors!
 
 ---
 
