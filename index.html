@@ -81,6 +81,13 @@ of the new ways of operating that we have developed.
   * 10 months for a version upgrade
 * Naturally leads us to container orchestration
 
+???
+
+We've operated this way for a long time and lived with the pain.
+These shared environments created significant pain.
+We didn't operate the platform well due
+to the challenges of making changes alongside development work.
+
 ---
 
 # Philosophies
@@ -209,7 +216,7 @@ the platform.
 
 # Build Stage
 
-* Goal: Get a validated docker image to deploy
+* Goal: Get a validated container image to deploy
 * Steps:
   * Package artifact
   * Run unit/component tests
@@ -221,7 +228,7 @@ the platform.
 One of the keys of our pipeline here is to provide flexibility in the build
 stage. This means we can start with lots of different s2i
 base images, provide many different types of base artifacts, and combine
-them to make standard sorts of docker images, which need little validation
+them to make standard sorts of container images, which need little validation
 because most of their layers come from our pre-validated s2i image.
 
 ---
@@ -265,6 +272,18 @@ pass in both pre-deployment and post deployment verification
   * Built in "happy path" - use Jenkins to generate objects
   * More flexible templated path - developers provide OpenShift `Template` object
 
+???
+
+This is where the Kubernetes/OpenShift API makes our life easy.
+We rev our manifest files and then apply them into the environment.
+If things go wrong with this there are other API methods available to use.
+
+This again lowers the bar to entry, but as teams gain complexity
+they are able to particpate in building more complex images
+and manifest objects.
+
+Exploring how to incoporate projects like Helm and Istio.
+
 ---
 
 # Verification
@@ -276,6 +295,12 @@ pass in both pre-deployment and post deployment verification
 * Integration tests in source code repository next to application code
 * Zephyr tests from JIRA for manual test phases
 
+???
+
+THIS SLIDE IS NOT ABOUT INTEGRATION TEST TYPES.
+
+This is more generic about how verification takes place.
+
 ---
 
 # Verification
@@ -286,6 +311,12 @@ pass in both pre-deployment and post deployment verification
   * API tests
   * Browser tests (Selenium)
   * Shell scripting validation
+
+???
+
+Talk about development team contributing the selenium test strategy
+We're always looking for ways to bring people onto the platform
+and improve validation strategies.
 
 ---
 
@@ -300,6 +331,13 @@ pass in both pre-deployment and post deployment verification
   * Deployment results
   * Approvers
 
+???
+
+Change management really is the game changer for us. ServiceNow
+is our company audit store and we uses it for a significant portion of
+our auditing capabilities. We want to be able to officially audit
+all of these things with every change.
+
 ---
 
 # Change Management
@@ -309,6 +347,12 @@ pass in both pre-deployment and post deployment verification
 * Standard change request process
   * Change request templates that can be instantiated to changes
   * Our pipeline enforces a standard process = Happy Auditors!
+
+???
+
+All features exposed through API
+
+Standard processes work great!
 
 ---
 
@@ -321,6 +365,11 @@ pass in both pre-deployment and post deployment verification
   * Update state
 * Provides a simple entrypoint for making the necessary API calls
 
+???
+
+Published open source plugin
+
+Built an easy way to carry out the necessary interations.
 
 ---
 
@@ -331,6 +380,12 @@ pass in both pre-deployment and post deployment verification
 * More than 100 audited production actions per week
 * Multiple other companies using our plugin
 * Validated our change management approach with our audit/compliance groups
+
+???
+
+The outcomes from this work has made our platform an enticing
+destination for development teams that are considering the work
+it will take to manage their applications.
 
 ---
 
@@ -344,17 +399,42 @@ pass in both pre-deployment and post deployment verification
   * Deployments
   * Validations
 
+???
+
+Transition is important here.
+
+Not only did we make it easy to manage how production works, we
+also wanted to build more capabilities for visualizing what is
+happening across our whole build and deploy system.
+
+Every action that takes place runs through our audit store,
+just exposed as a REST API that every point in the pipelines
+can call.
+
 ---
 
 # Visualizing the Data
 
 .center[![Deployments](/openshift-commons-dec-2018/images/deploymentLog.png)]
 
+???
+
+We get great views like this that allow a broader view by team or across a whole
+environment.
+
+Invested heavily in Grafana, just like the OpenShift project has.
+
 ---
 
 # Visualizing the Data
 
 .center[![DeploymentCount](/openshift-commons-dec-2018/images/deploymentCount.png)]
+
+???
+
+We can even get information like this that tracks how well our developers are
+doing within our platform. This gives us a first indication of when problems
+may arise and we have tracked this since early september.
 
 ---
 
@@ -367,15 +447,28 @@ pass in both pre-deployment and post deployment verification
   * Orchestrate Ansible Tower jobs for OpenShift infrastructure
   * Even manage our weblogic servers through these pipelines(!)
 
+???
+
+Solving for continuous delivery here has allowed us to solve
+other orchestration processes. This has included improving the way
+that we operate even our old J2EE environment, because we can
+do more consistent operational activities controlled by a pipeline.
+
 ---
 
 # Building for the future
 
 * Canary deployments and advanced deployment strategy
 * More complete testing strategies
-* Read data from metrics stores to know about deployment success
-* Tracking historical data
+* Include more (CNCF!) platform features such as Istio, Traeger, etc.
+* More complete validation deployment success
 * Overlay application data with deployment events
+
+
+???
+
+What we have found is that we can now iterate on our processes because
+everything is driven through a single source control system.
 
 ---
 
@@ -386,6 +479,13 @@ pass in both pre-deployment and post deployment verification
 * Our team manages two Jenkins plugins (service-now and prometheus)
 * Open sourced a library that translates Prometheus alerts to ServiceNow (Snogo)
 * Looking for more ways to contribute to the community
+
+???
+
+This is one of the things that I'm really excited about. HP
+never had an open source presence before our group formed and began
+doing this work, but we've really accelerated our work in the community
+in conjunction with the work we have done on OpenShift.
 
 ---
 
@@ -398,6 +498,9 @@ pass in both pre-deployment and post deployment verification
 * Open source is great!
 * Come work with us: https://healthpartners.com/careers
 
+???
+
+Great stuff! Audit and compliance are great friends!
 ---
 
 # References
@@ -408,3 +511,10 @@ pass in both pre-deployment and post deployment verification
 4. https://jenkins.io/doc/book/pipeline/shared-libraries/
 5. https://github.com/jmcshane/openshift-commons-dec-2018
 6. https://github.com/HealthPartners/rhug-sept-2018
+
+???
+
+The pipeline code can be found in the openshift-commons repository.
+
+There's also tons of code examples in my talks at the Minneapolis RHUG
+from September of this year.
