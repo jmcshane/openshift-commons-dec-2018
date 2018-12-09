@@ -20,8 +20,9 @@ class: center
 
 ???
 
-Start slow, strong. There's lots here, but you can't garble early.
+Start slow, strong. There's lots here, so you can't garble early.
 
+Energy is key, you love this stuff and you are good at it.
 
 ---
 layout: true
@@ -46,7 +47,7 @@ Large non-profit, regional health insurance health care provider in Minnesota
 
 Large enterprise - 26k employees!
 
-Started in 1957
+Started in 1957 as insurer
 
 ---
 
@@ -74,6 +75,13 @@ of the new ways of operating that we have developed.
 
 .center[![OurTimeline](/openshift-commons-dec-2018/images/timeline.png)]
 
+???
+
+Began evaluation around time I started Novemeber 2016.
+Made a purchase decision in Feb, got to implementation in July
+Dec 31 production date, beat it by 6 weeks!
+Continue to onboard teams onto the platform.
+
 ---
 
 # Our Old World
@@ -89,6 +97,13 @@ of the new ways of operating that we have developed.
 
 We've operated this way for a long time and lived with the pain.
 These shared environments created significant pain.
+
+Teams would bring two feature films to the office at 10PM for deployment nights
+once a quarter.
+
+During the last major upgrade for the old platform, the team worked overnight
+into the next day. People started showing up for work the next day!
+
 We didn't operate the platform well due
 to the challenges of making changes alongside development work.
 
@@ -97,10 +112,10 @@ to the challenges of making changes alongside development work.
 # Philosophies
 
 * Optimize for speed of delivery on the platform
-* Secure credentials
+* Secure credential store
 * Good default behavior
 * Ephemeral build systems
-* Source control practices - single mainline
+* Source control practices
 
 ???
 
@@ -160,6 +175,10 @@ Created a single entrypoint configured by a Jenkinsfile.
 Developers don't need to learn Groovy, just how to write
 a basic map in Groovy
 
+Lower bar to entry, teams don't need to know how to operate These
+tools, but they are given power over them through automated
+jobs.
+
 ---
 class: namedcode
 
@@ -184,6 +203,9 @@ Mostly boilerplate code that we have reduced as much as possible.
 Working to create automated processes that will validate these files
 as well as provide suggestions and capabilities that can migrate these files to new versions.
 
+Lower bar to entry in the platform, then democratize as
+you gain skill and capability to participate.
+
 The goal here is to make it easy to do the right thing. An application
 with these settings can be safely validated and deployed to production as simple
 as this looks.
@@ -197,6 +219,9 @@ as this looks.
 ???
 
 This is the view that application developers see when they are executing their pipeline.
+We will explore these steps individually and understand how an application
+moves from commit to production in our environment.
+
 ---
 
 # The Pipeline
@@ -235,6 +260,10 @@ base images, provide many different types of base artifacts, and combine
 them to make standard sorts of container images, which need little validation
 because most of their layers come from our pre-validated s2i image.
 
+Our low bar to entry here is a spring boot application based on a Java
+runtime docker image, built using maven. Of course, all of these options can
+be configured!
+
 ---
 
 # Testing
@@ -246,15 +275,20 @@ because most of their layers come from our pre-validated s2i image.
 ???
 
 Our team goal is to provide lots of capabilities for building a solid
-testing pyramid, lots of validation early in the build process, and
+testing pyramid (Fowler), lots of validation early in the build process, and
 good, but small end to end tests and smoke testing of applications
 as they are deployed.
+
+Need good validation early to avoid breaking integrated environments.
+Our web envrionment is integrated across many teams/components, and
+we need a way to validate that overall experience as well.
 
 ---
 
 # Pre-Deployment
 
 * Environment approval
+* HipChat notification
 * Check that the target cluster is available
 * Other validations as necessary
   * Static code scan approvals
@@ -264,9 +298,11 @@ as they are deployed.
 ???
 
 These steps vary by where the artifact is being deployed.
-The bar is set low to deploy to the dev environments, but as
+
+The bar is *set low to deploy* to the dev environments, but as
 your code is promoted up the stack, there are more requirements to
 pass in both pre-deployment and post deployment verification
+
 ---
 
 # Deployment
@@ -275,6 +311,7 @@ pass in both pre-deployment and post deployment verification
 * Two strategies
   * Built in "happy path" - use Jenkins to generate objects
   * More flexible templated path - developers provide OpenShift `Template` object
+* Integrate with platform components through labels and annotations
 
 ???
 
@@ -288,10 +325,14 @@ and manifest objects.
 
 Exploring how to incoporate projects like Helm and Istio.
 
+We do use these standard labels/annotations to bring in features like
+Prometheus and our kube-monkey, again good default behaviors!
+
 ---
 
 # Verification
 
+* Verify that the deployment completes successfully
 * Post deployment separated into "Phases" and run in parallel
 * SonarQube scan phase
 * Fortify scan phase
@@ -356,7 +397,8 @@ all of these things with every change.
 
 All features exposed through API
 
-Standard processes work great!
+Standard processes work great! Its a single process loop that
+starts from
 
 ---
 
@@ -391,23 +433,29 @@ The outcomes from this work has made our platform an enticing
 destination for development teams that are considering the work
 it will take to manage their applications.
 
+Last Friday had 10 production deploys. Its becoming more regular
+to see multiple changes every single day, rather than just once
+in awhile.
+
 ---
 
 # Visualizing the Data
 
-* Created our own audit datastore and send data to Splunk
-* Splunk: Short term event view
-* Data store: Long term auditing view of things that happen in the pipeline
+* Created a long term view for everything that happens in the pipeline
   * Approvals
   * Jobs
   * Deployments
   * Validations
+  * Success/Failure events
+  * Test results
 
 ???
 
 Transition is important here.
 
-Not only did we make it easy to manage how production works, we
+From production auditing to enabling
+development teams and platform teams to understand the health
+of the system as a whole. We
 also wanted to build more capabilities for visualizing what is
 happening across our whole build and deploy system.
 
@@ -436,8 +484,8 @@ Invested heavily in Grafana, just like the OpenShift project has.
 
 ???
 
-We can even get information like this that tracks how well our developers are
-doing within our platform. This gives us a first indication of when problems
+We can get information like this that tracks how well our developers are
+doing within our platform. This gives us an early indication of when problems
 may arise and we have tracked this since early september.
 
 ---
@@ -449,7 +497,7 @@ may arise and we have tracked this since early september.
   * ConfigMap and Secret management
   * Namespace management
   * Orchestrate Ansible Tower jobs for OpenShift infrastructure
-  * Even manage our weblogic servers through these pipelines(!)
+  * Even manage our Weblogic servers through these pipelines(!)
 
 ???
 
@@ -464,12 +512,16 @@ do more consistent operational activities controlled by a pipeline.
 
 * Canary deployments and advanced deployment strategy
 * More complete testing strategies
-* Include more (CNCF!) platform features such as Istio, Traeger, etc.
+* Include more (CNCF!) platform features such as Envoy, Traeger, etc.
 * More complete validation deployment success
 * Overlay application data with deployment events
 
 
 ???
+
+How do we build moving forward? Sometimes, automation can lock you
+in to certain answers. We have found this to be an incredibly flexible
+approach that is ready for the future!
 
 What we have found is that we can now iterate on our processes because
 everything is driven through a single source control system.
@@ -480,7 +532,7 @@ everything is driven through a single source control system.
 
 * Working to open-source parts of the pipeline
 * Open sourced our testing library
-* Our team manages two Jenkins plugins (service-now and prometheus)
+* Our team helps maintain two Jenkins plugins (service-now and prometheus)
 * Open sourced a library that translates Prometheus alerts to ServiceNow (Snogo)
 * Looking for more ways to contribute to the community
 
@@ -503,6 +555,12 @@ in conjunction with the work we have done on OpenShift.
 * Come work with us: https://healthpartners.com/careers
 
 ???
+
+OpenShift team has built many great integrations to Jenkins that
+we use across the board.
+
+Testing is key to any pipeline. You cannot do automated work like this
+without significant validation steps.
 
 Great stuff! Audit and compliance are great friends!
 ---
