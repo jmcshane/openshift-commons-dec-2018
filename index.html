@@ -49,17 +49,6 @@ Large enterprise - 26k employees!
 
 Started in 1957 as insurer
 
----
-
-# Who am I?
-
-* Joined HealthPartners in 2016
-* Platform and Architecture group
-* Our platform runs HealthPartners.com and our health plan administration
-
-???
-
-* Began our OpenShift journey in November 2016
 
 Platform and Architecture group formed out of a team that operated
 specifically in the HP.com space, but then became a group meant to
@@ -86,14 +75,16 @@ Continue to onboard teams onto the platform.
 
 # Our Old World
 
+.center[![PoleVault](/openshift-commons-dec-2018/images/polevault.jpg)]
+
+???
+
 * Long lead time to production
 * Deploys generally at night
 * Shared environments
 * Difficult to validate large changes
   * 10 months for a version upgrade
 * Naturally leads us to container orchestration
-
-???
 
 We've operated this way for a long time and lived with the pain.
 These shared environments created significant pain.
@@ -109,15 +100,15 @@ to the challenges of making changes alongside development work.
 
 ---
 
-# Philosophies
+.center[![LowBar](/openshift-commons-dec-2018/images/lowbar.jpg)]
+
+???
 
 * Optimize for speed of delivery on the platform
 * Secure credential store
 * Good default behavior
 * Ephemeral build systems
 * Source control practices
-
-???
 
 These five philosophies outline how we have made our decisions
 going forward to build and design the pipeline. Each of these
@@ -162,31 +153,10 @@ Capabilities:
 
 ---
 
-# Developer Viewpoint
-
-* Give control of the tools to the developers in self-service workflows
-* Single entrypoint to administrative actions
-* No longer need to manage hundreds of jobs on a single Jenkins server
-  * Jenkins job configuration now comes from source control!
-
-???
-
-Created a single entrypoint configured by a Jenkinsfile.
-Developers don't need to learn Groovy, just how to write
-a basic map in Groovy
-
-Lower bar to entry, teams don't need to know how to operate These
-tools, but they are given power over them through automated
-jobs.
-
----
 class: namedcode
 
 # Developer Viewpoint
 
-* Create your git repository with Jenkinsfile and pipeline.yaml at the root
-* `oc login https://openshift-bld1.hp.com && oc project MYPROJECT`
-* `oc create -f pipeline.yaml`
 
 ##### Jenkinsfile
 ```groovy
@@ -196,7 +166,21 @@ hpPipeline([
 ])
 ```
 
+
 ???
+
+* Give control of the tools to the developers in self-service workflows
+* Single entrypoint to administrative actions
+* No longer need to manage hundreds of jobs on a single Jenkins server
+  * Jenkins job configuration now comes from source control!
+
+Created a single entrypoint configured by a Jenkinsfile.
+Developers don't need to learn Groovy, just how to write
+a basic map in Groovy
+
+Lower bar to entry, teams don't need to know how to operate These
+tools, but they are given power over them through automated
+jobs.
 
 Created templates to generate these Jenkinsfile and pipeline.yaml files.
 Mostly boilerplate code that we have reduced as much as possible.
@@ -210,29 +194,12 @@ The goal here is to make it easy to do the right thing. An application
 with these settings can be safely validated and deployed to production as simple
 as this looks.
 
----
-
-# Developer Viewpoint
-
-.center[![ApplicationView](/openshift-commons-dec-2018/images/deploymentExample.png)]
-
-???
-
-This is the view that application developers see when they are executing their pipeline.
-We will explore these steps individually and understand how an application
-moves from commit to production in our environment.
 
 ---
 
 # The Pipeline
 
-1. Prepare
-2. Build
-3. Test
-4. Pre-deploy
-5. Deploy
-6. Verify
-7. Repeat 4-6
+.center[![PipelineView](/openshift-commons-dec-2018/images/pipeline.png)]
 
 ???
 
@@ -245,12 +212,8 @@ the platform.
 
 # Build Stage
 
-* Goal: Get a validated container image to deploy
-* Steps:
-  * Package artifact
-  * Run unit/component tests
-  * Run s2i build from base image
-  * Publish image to external registry
+.center[![BuildStage](/openshift-commons-dec-2018/images/buildstage.png)]
+
 
 ???
 
@@ -268,11 +231,14 @@ be configured!
 
 # Testing
 
+.center[![Testing](/openshift-commons-dec-2018/images/testing.jpg)]
+
+???
+
 * Unit & Component tests run before pre-deployment begins
 * Generally JUnit tests, building `@SpringBootTest` component tests to load parts of the application
 * H2 Database testing
 
-???
 
 Our team goal is to provide lots of capabilities for building a solid
 testing pyramid (Fowler), lots of validation early in the build process, and
@@ -287,6 +253,10 @@ we need a way to validate that overall experience as well.
 
 # Pre-Deployment
 
+.center[![Cockpit](/openshift-commons-dec-2018/images/cockpit.jpg)]
+
+???
+
 * Environment approval
 * HipChat notification
 * Check that the target cluster is available
@@ -294,8 +264,6 @@ we need a way to validate that overall experience as well.
   * Static code scan approvals
   * Gather Jira information
   * Change management
-
-???
 
 These steps vary by where the artifact is being deployed.
 
@@ -307,13 +275,24 @@ pass in both pre-deployment and post deployment verification
 
 # Deployment
 
+.center[![DeploymentOpenShift](/openshift-commons-dec-2018/images/deployment.png)]
+
+???
+
+---
+
+# Deployment
+
+.center[![Takeoff](/openshift-commons-dec-2018/images/takeoff.jpg)]
+
+???
+
 * Use the OpenShift API to `apply` objects to the environment
 * Two strategies
   * Built in "happy path" - use Jenkins to generate objects
   * More flexible templated path - developers provide OpenShift `Template` object
 * Integrate with platform components through labels and annotations
 
-???
 
 This is where the Kubernetes/OpenShift API makes our life easy.
 We rev our manifest files and then apply them into the environment.
@@ -332,40 +311,29 @@ Prometheus and our kube-monkey, again good default behaviors!
 
 # Verification
 
+.center[![Checklist](/openshift-commons-dec-2018/images/checklist.png)]
+
+???
+
 * Verify that the deployment completes successfully
 * Post deployment separated into "Phases" and run in parallel
 * SonarQube scan phase
 * Fortify scan phase
   * Separate scanning from result retrieval for better user experience
 * Integration tests in source code repository next to application code
-* Zephyr tests from JIRA for manual test phases
-
-???
-
-THIS SLIDE IS NOT ABOUT INTEGRATION TEST TYPES.
-
-This is more generic about how verification takes place.
-
----
-
-# Verification
-
-* Integration tests use the OpenShift proxy API to target new pods
-* Record test results for change management
-* Three automated test types:
-  * API tests
-  * Browser tests (Selenium)
-  * Shell scripting validation
-
-???
 
 Talk about development team contributing the selenium test strategy
 We're always looking for ways to bring people onto the platform
 and improve validation strategies.
 
+
 ---
 
 # Change Management
+
+.center[![CardCatalog](/openshift-commons-dec-2018/images/cardcatalog.jpg)]
+
+???
 
 * ServiceNow is our company-wide audit store
   * Test results
@@ -376,7 +344,6 @@ and improve validation strategies.
   * Deployment results
   * Approvers
 
-???
 
 Change management really is the game changer for us. ServiceNow
 is our company audit store and we uses it for a significant portion of
@@ -387,22 +354,21 @@ all of these things with every change.
 
 # Change Management
 
+.center[![Journal](/openshift-commons-dec-2018/images/journal.jpg)]
+
+???
+
 * ServiceNow TableAPI
   * Much of the actions in the ServiceNow UI are available via API
 * Standard change request process
   * Change request templates that can be instantiated to changes
   * Our pipeline enforces a standard process = Happy Auditors!
 
-???
 
 All features exposed through API
 
 Standard processes work great! Its a single process loop that
 starts from
-
----
-
-# Change Management
 
 * Created a Jenkins plugin to carry out standard actions
 * https://github.com/jenkinsci/service-now-plugin
@@ -411,7 +377,6 @@ starts from
   * Update state
 * Provides a simple entrypoint for making the necessary API calls
 
-???
 
 Published open source plugin
 
@@ -419,7 +384,11 @@ Built an easy way to carry out the necessary interations.
 
 ---
 
-# Change Management: Results
+# Results
+
+.center[![Results](/openshift-commons-dec-2018/images/results.png)]
+
+???
 
 * Can go from commit to production in 18 minutes
 * Have completed over 10 deploys in a single day
@@ -427,7 +396,6 @@ Built an easy way to carry out the necessary interations.
 * Multiple other companies using our plugin
 * Validated our change management approach with our audit/compliance groups
 
-???
 
 The outcomes from this work has made our platform an enticing
 destination for development teams that are considering the work
@@ -437,9 +405,15 @@ Last Friday had 10 production deploys. Its becoming more regular
 to see multiple changes every single day, rather than just once
 in awhile.
 
+
+
 ---
 
 # Visualizing the Data
+
+.center[![Deployments](/openshift-commons-dec-2018/images/deploymentLog.png)]
+
+???
 
 * Created a long term view for everything that happens in the pipeline
   * Approvals
@@ -448,8 +422,6 @@ in awhile.
   * Validations
   * Success/Failure events
   * Test results
-
-???
 
 Transition is important here.
 
@@ -463,13 +435,6 @@ Every action that takes place runs through our audit store,
 just exposed as a REST API that every point in the pipelines
 can call.
 
----
-
-# Visualizing the Data
-
-.center[![Deployments](/openshift-commons-dec-2018/images/deploymentLog.png)]
-
-???
 
 We get great views like this that allow a broader view by team or across a whole
 environment.
@@ -490,7 +455,11 @@ may arise and we have tracked this since early september.
 
 ---
 
-# Multi-Faceted Approach
+# Flexible Approach
+
+.center[![Lion](/openshift-commons-dec-2018/images/flexible.jpg)]
+
+???
 
 * This is one of many of these libraries we have written:
   * Liquibase pipelines
@@ -499,7 +468,6 @@ may arise and we have tracked this since early september.
   * Orchestrate Ansible Tower jobs for OpenShift infrastructure
   * Even manage our Weblogic servers through these pipelines(!)
 
-???
 
 Solving for continuous delivery here has allowed us to solve
 other orchestration processes. This has included improving the way
@@ -508,7 +476,18 @@ do more consistent operational activities controlled by a pipeline.
 
 ---
 
-# Building for the future
+<h1>Building for the Future</h1>
+
+.center[
+
+![CNCF](/openshift-commons-dec-2018/images/cncf.png)
+![Envoy](/openshift-commons-dec-2018/images/envoy.png)
+![Jaeger](/openshift-commons-dec-2018/images/jaeger.png)
+![Overlay](/openshift-commons-dec-2018/images/overlay.png)
+
+]
+
+???
 
 * Canary deployments and advanced deployment strategy
 * More complete testing strategies
@@ -516,8 +495,6 @@ do more consistent operational activities controlled by a pipeline.
 * More complete validation deployment success
 * Overlay application data with deployment events
 
-
-???
 
 How do we build moving forward? Sometimes, automation can lock you
 in to certain answers. We have found this to be an incredibly flexible
@@ -528,15 +505,22 @@ everything is driven through a single source control system.
 
 ---
 
-# Open Source
+<h1>Open Source</h1>
+
+.center[
+![OpenShiftLogo](/openshift-commons-dec-2018/images/openshift.png)
+![JenkinsLogo](/openshift-commons-dec-2018/images/jenkinslogo.png)
+![PrometheusLogo](/openshift-commons-dec-2018/images/prometheus.png)
+![GithubLogo](/openshift-commons-dec-2018/images/github.jpg)
+]
+
+???
 
 * Working to open-source parts of the pipeline
 * Open sourced our testing library
+* Looking for more ways to contribute to the community
 * Our team helps maintain two Jenkins plugins (service-now and prometheus)
 * Open sourced a library that translates Prometheus alerts to ServiceNow (Snogo)
-* Looking for more ways to contribute to the community
-
-???
 
 This is one of the things that I'm really excited about. HP
 never had an open source presence before our group formed and began
